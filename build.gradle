@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.8'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation platform('org.springframework.boot:spring-boot-dependencies:2.7.8')
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    //implementation 'io.zeebe:zeebe-client-java:1.0.0-alpha7'
+    // https://mvnrepository.com/artifact/io.camunda/zeebe-client-java
+    implementation 'io.camunda:zeebe-client-java:8.2.3'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+test {
+    useJUnitPlatform()
+}
