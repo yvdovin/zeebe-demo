@@ -46,7 +46,7 @@
       </bpmn:exclusiveGateway>
       <bpmn:sequenceFlow id="Flow_1xwb0a7" sourceRef="Event_0qi1k7r" targetRef="Gateway_1pr7g43" />
       <bpmn:sequenceFlow id="Flow_1b3e1si" sourceRef="Gateway_1pr7g43" targetRef="Activity_09t8m8t">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= get value(statuses, "delivery_status_"+string(personId)) = "OPEN_LINK"</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= get value(email_delivery_statuses, "email_delivery_status_"+string(personId)) = "OPEN_LINK"</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_1v6jzjw" sourceRef="Gateway_1pr7g43" targetRef="Activity_1wz9w0x" />
       <bpmn:exclusiveGateway id="Gateway_02qnuo2">
