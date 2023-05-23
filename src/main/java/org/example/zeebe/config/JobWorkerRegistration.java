@@ -29,6 +29,7 @@ public class JobWorkerRegistration {
         final JobWorker worker = zeebeClient.newWorker()
                 .jobType("payment-service")
                 .handler(((client, job) -> {
+                    job.getBpmnProcessId();
                     String deliveryType;
                     if (count.get() % 2 == 0) {
                         deliveryType = "regular";
@@ -38,7 +39,7 @@ public class JobWorkerRegistration {
                     }
                     System.out.println("Collecting money $$$$$");
                     client.newCompleteCommand(job.getKey())
-                            .variables(Map.of("deliveryType", deliveryType,
+                            .variables(Map.of("", deliveryType,
                                     "orderId", 123))
                             .send()
                             .join();
@@ -91,5 +92,67 @@ public class JobWorkerRegistration {
                 }))
                 .open();
         workerList.add(getPersonIdsWorker);
+
+        createMarketingCampaignSendBatchEmailWorker();
+        createMarketingCampaignBatchEmailStatusWorker();
+        createMarketingCampaignSendSmsWorker();
+        createMarketingCampaignCallCenterWorker();
+    }
+
+    public void createMarketingCampaignSendBatchEmailWorker() {
+        final JobWorker createMarketingCampaignSendBatchEmailWorker = zeebeClient.newWorker()
+                .jobType("marketing-campaign-send-batch-email")
+                .handler(((client, job) -> {
+                    System.out.println("Start send email to 1,2,5");
+                    client.newCompleteCommand(job.getKey())
+                            .send()
+                            .join();
+                }))
+                .open();
+        workerList.add(createMarketingCampaignSendBatchEmailWorker);
+    }
+
+    public void createMarketingCampaignBatchEmailStatusWorker() {
+        final JobWorker createMarketingCampaignSendBatchEmailWorker = zeebeClient.newWorker()
+                .jobType("marketing-campaign-batch-email-statuses")
+                .handler(((client, job) -> {
+                    client.newCompleteCommand(job.getKey())
+                            .variables( Map.of("email_delivery_statuses",
+                                    Map.of("email_delivery_status_1", "OPEN_LINK",
+                                    "email_delivery_status_2", "NOT_OPENED",
+                                    "email_delivery_status_5", "ERROR")))
+                            .send()
+                            .join();
+                }))
+                .open();
+        workerList.add(createMarketingCampaignSendBatchEmailWorker);
+    }
+
+    public void createMarketingCampaignSendSmsWorker() {
+        final JobWorker createMarketingCampaignSendBatchEmailWorker = zeebeClient.newWorker()
+                .jobType("send-sms")
+                .handler(((client, job) -> {
+                    Integer personId = (Integer) job.getVariablesAsMap().get("personId");
+                    System.out.println("Send sms " + personId);
+                    client.newCompleteCommand(job.getKey())
+                            .send()
+                            .join();
+                }))
+                .open();
+        workerList.add(createMarketingCampaignSendBatchEmailWorker);
+    }
+
+    public void createMarketingCampaignCallCenterWorker() {
+        final JobWorker createMarketingCampaignSendBatchEmailWorker = zeebeClient.newWorker()
+                .jobType("call-center")
+                .handler(((client, job) -> {
+                    Integer personId = (Integer) job.getVariablesAsMap().get("personId");
+                    System.out.println("Send to call center " + personId);
+                    client.newCompleteCommand(job.getKey())
+                            .send()
+                            .join();
+                }))
+                .open();
+        workerList.add(createMarketingCampaignSendBatchEmailWorker);
     }
 }

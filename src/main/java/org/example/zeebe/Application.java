@@ -20,7 +20,7 @@ public class Application {
 
         System.out.println("Connected...");
 
-        deployProcess(zeebeClient);
+        //deployProcess(zeebeClient);
 
         //startProcess(zeebeClient);
 
